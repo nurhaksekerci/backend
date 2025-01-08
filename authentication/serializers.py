@@ -103,6 +103,7 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)
+    user = UserSerializer(read_only=True)
     tokens = serializers.SerializerMethodField()
 
     def get_tokens(self, obj):
@@ -127,6 +128,7 @@ class LoginSerializer(serializers.Serializer):
 
             return {
                 'username': user.username,
+                'user': user,
                 'tokens': self.get_tokens({'username': username})
             }
         
