@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,28 +160,11 @@ MAX_UPLOAD_SIZE = 5242880  # 5MB
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Security Settings
-SECURE_SSL_REDIRECT = False  # Development'ta False, Production'da True olmalı
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# CORS ayarları
-CORS_ALLOW_ALL_ORIGINS = True  # Sadece development için
+# CORS ayarları - Tüm istekleri kabul et
+CORS_ALLOW_ALL_ORIGINS = True  # Tüm originlere izin ver
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF ayarları
-CSRF_COOKIE_SECURE = False  # Development'ta False, Production'da True olmalı
-SESSION_COOKIE_SECURE = False  # Development'ta False, Production'da True olmalı
-
-# HTTPS ayarları
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_SECONDS = 31536000  # 1 yıl
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -188,7 +172,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',  # Tüm isteklere izin ver
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
@@ -205,4 +189,39 @@ SWAGGER_SETTINGS = {
     },
     'USE_SESSION_AUTH': False,
     'JSON_EDITOR': True,
+    'SUPPORTED_SUBMIT_METHODS': [  # Tüm HTTP metodlarına izin ver
+        'get',
+        'post',
+        'put',
+        'delete',
+        'patch',
+        'head',
+        'options',
+        'trace'
+    ],
+}
+
+# JWT Settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
 }
