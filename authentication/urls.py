@@ -13,4 +13,6 @@ router.register(r'user-languages', views.UserLanguageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login/', views.login_view, name='login'),
+    path('token/refresh/', views.token_refresh_view, name='token_refresh'),
 ] 

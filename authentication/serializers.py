@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Company, Branch, User, Certificate, Currency, Language, UserLanguage
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import RefreshToken
 
 class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -97,3 +100,52 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
             user.save()
         return user 
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=128, write_only=True)
+    tokens = serializers.SerializerMethodField()
+
+    def get_tokens(self, obj):
+        user = User.objects.get(username=obj['username'])
+        return {
+            'access': user.tokens()['access'],
+            'refresh': user.tokens()['refresh']
+        }
+
+    def validate(self, data):
+        username = data.get('username', '')
+        password = data.get('password', '')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+
+            if not user:
+                raise serializers.ValidationError('Geçersiz kullanıcı adı veya şifre.')
+
+            if not user.is_active:
+                raise serializers.ValidationError('Hesap aktif değil.')
+
+            return {
+                'username': user.username,
+                'tokens': self.get_tokens({'username': username})
+            }
+        
+        raise serializers.ValidationError('Kullanıcı adı ve şifre gereklidir.')
+
+class TokenRefreshSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    def validate(self, attrs):
+        refresh_token = attrs.get('refresh')
+        
+        try:
+            # Token'ı doğrula ve yeni access token al
+            refresh = RefreshToken(refresh_token)
+            data = {
+                'access': str(refresh.access_token),
+                'refresh': str(refresh)
+            }
+            return data
+        except Exception as e:
+            raise serializers.ValidationError('Geçersiz veya süresi dolmuş token.') 

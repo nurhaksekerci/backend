@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from rest_framework_simplejwt.tokens import RefreshToken
 
 phone_validator = RegexValidator(
     regex=r'^\+?90?\d{10}$',
@@ -428,6 +429,13 @@ class User(AbstractUser, SoftDeleteModel):
 
     def __str__(self):
         return f"{self.get_full_name()} - {self.company.name if self.company else 'Şirket Yok'}"
+
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
+        }
 
 @receiver(post_save, sender=Company)
 def create_main_branch(sender, instance, created, **kwargs):
