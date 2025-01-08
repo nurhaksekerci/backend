@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from .models import Company, Branch, User, Certificate, Currency, Language, UserLanguage
 from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -140,7 +139,6 @@ class TokenRefreshSerializer(serializers.Serializer):
         refresh_token = attrs.get('refresh')
         
         try:
-            # Token'ı doğrula ve yeni access token al
             refresh = RefreshToken(refresh_token)
             data = {
                 'access': str(refresh.access_token),
