@@ -127,7 +127,6 @@ class LoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Hesap aktif değil.')
 
             return {
-                'username': user.username,
                 'user': UserSerializer(user).data,
                 'tokens': self.get_tokens({'username': username})
             }
@@ -149,3 +148,85 @@ class TokenRefreshSerializer(serializers.Serializer):
             return data
         except Exception as e:
             raise serializers.ValidationError('Geçersiz veya süresi dolmuş token.') 
+
+class CompanyDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = [
+            'id', 'name', 'address', 'tax_number', 'tax_office',
+            'is_active', 'logo', 'phone', 'email', 'website',
+            'facebook', 'instagram', 'twitter', 'linkedin',
+            'subscription_start_date', 'subscription_end_date',
+            'is_subscription_active', 'branch_limit'
+        ]
+
+class BranchDetailSerializer(serializers.ModelSerializer):
+    company = CompanyDetailSerializer(read_only=True)
+    
+    class Meta:
+        model = Branch
+        fields = [
+            'id', 'company', 'name', 'address', 'phone', 
+            'email', 'is_active'
+        ]
+
+class CurrencyDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ['id', 'code', 'name', 'symbol']
+
+class LanguageDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ['id', 'name', 'code']
+
+class UserLanguageDetailSerializer(serializers.ModelSerializer):
+    language = LanguageDetailSerializer(read_only=True)
+
+    class Meta:
+        model = UserLanguage
+        fields = ['id', 'language', 'proficiency']
+
+class CertificateDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = [
+            'id', 'name', 'file', 'issue_date', 'expiry_date',
+            'created_at', 'updated_at'
+        ]
+
+class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    company = CompanyDetailSerializer(read_only=True)
+    branch = BranchDetailSerializer(read_only=True)
+    certificates = CertificateDetailSerializer(many=True, read_only=True)
+    languages = UserLanguageDetailSerializer(many=True, read_only=True)
+    salary_currency = CurrencyDetailSerializer(read_only=True)
+    role_display = serializers.CharField(source='get_role_display', read_only=True)
+    gender_display = serializers.CharField(source='get_gender_display', read_only=True)
+    blood_type_display = serializers.CharField(source='get_blood_type_display', read_only=True)
+    driving_license_display = serializers.CharField(source='get_driving_license_display', read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'email', 'first_name', 'last_name',
+            'full_name', 'profile_picture', 'birth_date', 'phone',
+            'hire_date', 'driving_license', 'driving_license_display',
+            'gender', 'gender_display', 'company', 'branch',
+            'is_company_admin', 'is_branch_admin', 'role', 'role_display',
+            'tckn', 'address', 'emergency_contact_name',
+            'emergency_contact_phone', 'emergency_contact_relation',
+            'blood_type', 'blood_type_display', 'department',
+            'annual_leave_days', 'remaining_leave_days',
+            'salary', 'salary_currency', 'performance_score',
+            'certificates', 'languages', 'is_active', 'is_staff',
+            'is_superuser', 'date_joined', 'last_login'
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'tckn': {'write_only': True}
+        }
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}" 
