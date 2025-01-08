@@ -128,7 +128,7 @@ class LoginSerializer(serializers.Serializer):
 
             return {
                 'username': user.username,
-                'user': user,
+                'user': UserSerializer(user).data,
                 'tokens': self.get_tokens({'username': username})
             }
         
