@@ -23,7 +23,7 @@ class TourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ['id', 'company', 'name', 'start_city', 'start_city_name', 'end_city', 'end_city_name', 
+        fields = ['id', 'company', 'name', 'start_city', 'start_city_name', 'end_city', 'end_city_name',
                  'is_active', 'created_at', 'updated_at']
 
 class NoVehicleTourSerializer(serializers.ModelSerializer):
@@ -39,13 +39,13 @@ class TransferSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transfer
-        fields = ['id', 'company', 'name', 'start_city', 'start_city_name', 'end_city', 'end_city_name', 
+        fields = ['id', 'company', 'name', 'start_city', 'start_city_name', 'end_city', 'end_city_name',
                  'is_active', 'created_at', 'updated_at']
 
 class HotelPriceHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = HotelPriceHistory
-        fields = ['id', 'hotel', 'single_price', 'double_price', 'triple_price', 'currency', 
+        fields = ['id', 'hotel', 'single_price', 'double_price', 'triple_price', 'currency',
                  'valid_from', 'valid_until', 'is_active', 'created_at']
 
 class HotelSerializer(serializers.ModelSerializer):
@@ -55,8 +55,8 @@ class HotelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hotel
-        fields = ['id', 'company', 'name', 'city', 'city_name', 'single_price', 'double_price', 
-                 'triple_price', 'currency', 'currency_code', 'valid_until', 'is_active', 
+        fields = ['id', 'company', 'name', 'city', 'city_name', 'single_price', 'double_price',
+                 'triple_price', 'currency', 'currency_code', 'valid_until', 'is_active',
                  'created_at', 'updated_at', 'current_prices']
 
     def get_current_prices(self, obj):
@@ -68,7 +68,7 @@ class HotelSerializer(serializers.ModelSerializer):
 class MuseumPriceHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MuseumPriceHistory
-        fields = ['id', 'museum', 'local_price', 'foreign_price', 'currency', 
+        fields = ['id', 'museum', 'local_price', 'foreign_price', 'currency',
                  'valid_from', 'valid_until', 'is_active', 'created_at']
 
 class MuseumSerializer(serializers.ModelSerializer):
@@ -78,8 +78,8 @@ class MuseumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Museum
-        fields = ['id', 'company', 'name', 'city', 'city_name', 'local_price', 'foreign_price', 
-                 'currency', 'currency_code', 'valid_until', 'is_active', 'created_at', 
+        fields = ['id', 'company', 'name', 'city', 'city_name', 'local_price', 'foreign_price',
+                 'currency', 'currency_code', 'valid_until', 'is_active', 'created_at',
                  'updated_at', 'current_prices']
 
     def get_current_prices(self, obj):
@@ -103,7 +103,7 @@ class GuideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Guide
-        fields = ['id', 'company', 'name', 'phone', 'document_no', 'cities', 'cities_names', 
+        fields = ['id', 'company', 'name', 'phone', 'document_no', 'cities', 'cities_names',
                  'is_active', 'created_at', 'updated_at']
 
     def get_cities_names(self, obj):
@@ -132,7 +132,7 @@ class ActivitySupplierSerializer(serializers.ModelSerializer):
 class VehicleCostHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleCostHistory
-        fields = ['id', 'vehicle_cost', 'car_cost', 'minivan_cost', 'minibus_cost', 'midibus_cost', 
+        fields = ['id', 'vehicle_cost', 'car_cost', 'minivan_cost', 'minibus_cost', 'midibus_cost',
                  'bus_cost', 'currency', 'valid_from', 'valid_until', 'is_active', 'created_at']
 
 class VehicleCostSerializer(serializers.ModelSerializer):
@@ -142,9 +142,9 @@ class VehicleCostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VehicleCost
-        fields = ['id', 'company', 'supplier', 'supplier_name', 'tour', 'transfer', 'car_cost', 
-                 'minivan_cost', 'minibus_cost', 'midibus_cost', 'bus_cost', 'currency', 
-                 'currency_code', 'valid_until', 'is_active', 'created_at', 'updated_at', 
+        fields = ['id', 'company', 'supplier', 'supplier_name', 'tour', 'transfer', 'car_cost',
+                 'minivan_cost', 'minibus_cost', 'midibus_cost', 'bus_cost', 'currency',
+                 'currency_code', 'valid_until', 'is_active', 'created_at', 'updated_at',
                  'current_prices']
 
     def get_current_prices(self, obj):
@@ -156,7 +156,7 @@ class VehicleCostSerializer(serializers.ModelSerializer):
 class ActivityCostHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityCostHistory
-        fields = ['id', 'activity_cost', 'price', 'currency', 'valid_from', 'valid_until', 
+        fields = ['id', 'activity_cost', 'price', 'currency', 'valid_from', 'valid_until',
                  'is_active', 'created_at']
 
 class ActivityCostSerializer(serializers.ModelSerializer):
@@ -167,12 +167,12 @@ class ActivityCostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityCost
-        fields = ['id', 'company', 'activity', 'activity_name', 'supplier', 'supplier_name', 
-                 'price', 'currency', 'currency_code', 'valid_until', 'is_active', 
+        fields = ['id', 'company', 'activity', 'activity_name', 'supplier', 'supplier_name',
+                 'price', 'currency', 'currency_code', 'valid_until', 'is_active',
                  'created_at', 'updated_at', 'current_prices']
 
     def get_current_prices(self, obj):
         current = obj.get_price_for_date(timezone.now().date())
         if current:
             return ActivityCostHistorySerializer(current).data
-        return None 
+        return None

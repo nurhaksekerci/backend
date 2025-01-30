@@ -30,6 +30,7 @@ class CompanySerializer(serializers.ModelSerializer):
     total_employees = serializers.SerializerMethodField()
     total_branches = serializers.SerializerMethodField()
     branches = BranchSerializer(many=True, read_only=True)
+    currencies = CurrencySerializer(many=True, read_only=True)
 
     class Meta:
         model = Company
@@ -98,7 +99,7 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             user.set_password(password)
             user.save()
-        return user 
+        return user
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255)
@@ -130,7 +131,7 @@ class LoginSerializer(serializers.Serializer):
                 'user': UserSerializer(user).data,
                 'tokens': self.get_tokens({'username': username})
             }
-        
+
         raise serializers.ValidationError('Kullanıcı adı ve şifre gereklidir.')
 
 class TokenRefreshSerializer(serializers.Serializer):
@@ -138,7 +139,7 @@ class TokenRefreshSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         refresh_token = attrs.get('refresh')
-        
+
         try:
             refresh = RefreshToken(refresh_token)
             data = {
@@ -147,14 +148,15 @@ class TokenRefreshSerializer(serializers.Serializer):
             }
             return data
         except Exception as e:
-            raise serializers.ValidationError('Geçersiz veya süresi dolmuş token.') 
+            raise serializers.ValidationError('Geçersiz veya süresi dolmuş token.')
 
 class CompanyDetailSerializer(serializers.ModelSerializer):
+    currencies = CurrencySerializer(many=True, read_only=True)
     class Meta:
         model = Company
         fields = [
             'id', 'name', 'address', 'tax_number', 'tax_office',
-            'is_active', 'logo', 'phone', 'email', 'website',
+            'is_active', 'logo', 'phone', 'currencies', 'email', 'website',
             'facebook', 'instagram', 'twitter', 'linkedin',
             'subscription_start_date', 'subscription_end_date',
             'is_subscription_active', 'branch_limit'
@@ -162,11 +164,11 @@ class CompanyDetailSerializer(serializers.ModelSerializer):
 
 class BranchDetailSerializer(serializers.ModelSerializer):
     company = CompanyDetailSerializer(read_only=True)
-    
+
     class Meta:
         model = Branch
         fields = [
-            'id', 'company', 'name', 'address', 'phone', 
+            'id', 'company', 'name', 'address', 'phone',
             'email', 'is_active'
         ]
 
@@ -229,4 +231,4 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def get_full_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}" 
+        return f"{obj.first_name} {obj.last_name}"

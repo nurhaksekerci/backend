@@ -18,6 +18,11 @@ router.register(r'activity-suppliers', views.ActivitySupplierViewSet, basename='
 router.register(r'vehicle-costs', views.VehicleCostViewSet, basename='vehicle-cost')
 router.register(r'activity-costs', views.ActivityCostViewSet, basename='activity-cost')
 
+router.register(r'hotel-price-history', views.HotelPriceHistoryViewSet, basename='hotel-price-history')
+router.register(r'museum-price-history', views.MuseumPriceHistoryViewSet, basename='museum-price-history')
+router.register(r'vehicle-cost-history', views.VehicleCostHistoryViewSet, basename='vehicle-cost-history')
+router.register(r'activity-cost-history', views.ActivityCostHistoryViewSet, basename='activity-cost-history')
+
 urlpatterns = [
     path('', include(router.urls)),
-] 
+]
