@@ -7,11 +7,15 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from drf_yasg.utils import swagger_auto_schema
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 
 class CompanyFilterMixin:
     def get_queryset(self):
         queryset = super().get_queryset()
+<<<<<<< HEAD
 
         # Swagger kontrolü
         if getattr(self, 'swagger_fake_view', False):
@@ -22,6 +26,13 @@ class CompanyFilterMixin:
             return queryset.filter(company=self.request.user.company)
         return queryset
 
+=======
+        # Eğer modelde company alanı varsa filtrele
+        if hasattr(self.get_serializer().Meta.model, 'company'):
+            return queryset.filter(company=self.request.user.company)
+        return queryset
+
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 @swagger_auto_schema(tags=['Basic Data'])
 class VehicleTypeViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     queryset = VehicleType.objects.all()
@@ -179,7 +190,10 @@ class ActivityCostViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
         serializer = ActivityCostHistorySerializer(history, many=True)
         return Response(serializer.data)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 class ActivityCostHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     queryset = ActivityCostHistory.objects.all()
     serializer_class = ActivityCostHistorySerializer
@@ -188,7 +202,10 @@ class ActivityCostHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     filterset_fields = ['activity_cost', 'currency', 'is_active']
     search_fields = ['activity_cost__activity__name']
     ordering_fields = ['valid_from', 'valid_until', 'created_at']
+<<<<<<< HEAD
     pagination_class = None
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 
 # Fiyat geçmişi ViewSet'leri
 class HotelPriceHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
@@ -199,7 +216,10 @@ class HotelPriceHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     filterset_fields = ['hotel', 'currency', 'is_active']
     search_fields = ['hotel__name']
     ordering_fields = ['valid_from', 'valid_until', 'created_at']
+<<<<<<< HEAD
     pagination_class = None
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 
 class MuseumPriceHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     queryset = MuseumPriceHistory.objects.all()
@@ -209,7 +229,10 @@ class MuseumPriceHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     filterset_fields = ['museum', 'currency', 'is_active']
     search_fields = ['museum__name']
     ordering_fields = ['valid_from', 'valid_until', 'created_at']
+<<<<<<< HEAD
     pagination_class = None
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 
 class VehicleCostHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     queryset = VehicleCostHistory.objects.all()
@@ -219,7 +242,10 @@ class VehicleCostHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     filterset_fields = ['vehicle_cost', 'currency', 'is_active']
     search_fields = ['vehicle_cost__supplier__name']
     ordering_fields = ['valid_from', 'valid_until', 'created_at']
+<<<<<<< HEAD
     pagination_class = None
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
 
 class ActivityCostHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     queryset = ActivityCostHistory.objects.all()
@@ -229,4 +255,7 @@ class ActivityCostHistoryViewSet(CompanyFilterMixin, viewsets.ModelViewSet):
     filterset_fields = ['activity_cost', 'currency', 'is_active']
     search_fields = ['activity_cost__activity__name']
     ordering_fields = ['valid_from', 'valid_until', 'created_at']
+<<<<<<< HEAD
     pagination_class = None
+=======
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33

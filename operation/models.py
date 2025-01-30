@@ -1,4 +1,5 @@
 from django.db import models
+<<<<<<< HEAD
 from django.core.exceptions import ValidationError
 from authentication.models import Company, Currency, Branch
 from files.models import (
@@ -345,3 +346,7 @@ class OperationSubItem(models.Model):
 
     class Meta:
         ordering = ['ordering']
+=======
+
+# Create your models here.
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33

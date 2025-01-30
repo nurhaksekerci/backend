@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.contrib import admin
 from .models import (
     Operation, 
@@ -43,3 +44,8 @@ class OperationSubItemAdmin(admin.ModelAdmin):
     list_display = ['operation_item', 'subitem_type', 'ordering', 'is_active']
     list_filter = ['subitem_type', 'is_active']
     ordering = ['operation_item', 'ordering']
+=======
+from django.contrib import admin
+
+# Register your models here.
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33

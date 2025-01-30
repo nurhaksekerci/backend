@@ -1,4 +1,5 @@
 from django.shortcuts import render
+<<<<<<< HEAD
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -104,3 +105,7 @@ class OperationSubItemViewSet(viewsets.ModelViewSet):
             return OperationSubItem.objects.none()
 
         return OperationSubItem.objects.filter(operation_item__operation_day__operation__company=self.request.user.company)
+=======
+
+# Create your views here.
+>>>>>>> 56a07c6e4ea95ffd215c388348ff0b8d7c2dbe33
